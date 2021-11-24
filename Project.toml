@@ -1,0 +1,13 @@
+name = "CellListMapBenchmarks"
+uuid = "65ff6b17-840c-4d89-80af-26198f6fa7b5"
+authors = ["Leandro Martinez <lmartine@unicamp.br> and contributors"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
