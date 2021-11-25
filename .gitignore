@@ -1,1 +1,9 @@
 /Manifest.toml
+*.swp
+*.BAK
+*.vel
+*.dcd
+*.xst
+*.xyz
+*.coor
+*.log
