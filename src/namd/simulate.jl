@@ -118,7 +118,7 @@ function simulate(params::Params{V,N,T,UnitCellType}; parallel=true) where {V,N,
 
     # preallocate threaded output, since it contains the forces vector
     f .= Ref(zeros(eltype(f)))
-    f_threaded = [ deepcopy(f) for _ in 1:nthreads() ]
+    f_threaded = [ deepcopy(f) for _ in 1:cl.nbatches.map_computation ]
     aux = CellListMap.AuxThreaded(cl)
 
     # Print data at initial point
@@ -137,7 +137,7 @@ function simulate(params::Params{V,N,T,UnitCellType}; parallel=true) where {V,N,
         # Reset forces
         flast .= f
         f .= Ref(zeros(eltype(f)))
-        @threads for it in 1:nthreads()
+        @threads for it in 1:length(f_threaded)
             f_threaded[it] .= Ref(zeros(eltype(f)))
         end
 
