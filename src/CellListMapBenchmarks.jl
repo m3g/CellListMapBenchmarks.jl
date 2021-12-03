@@ -74,7 +74,7 @@ function namd100k()
 end
 
 # Run namd 1_250_000 benchmark
-function namdlarge(n=4)
+function namdlarge(;n=4)
     hostname=gethostname()
     name="namdlarge_$n"
     version = get_version()

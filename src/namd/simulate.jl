@@ -100,7 +100,7 @@ function createbox(n=0,cutoff=12.)
     return x, box
 end
 
-function simulate_large(n;nsteps=1,nbatches=(0,0))
+function simulate_large(n;nsteps=500,nbatches=(0,0))
     x, box = createbox(n)
     println("Number of particles = ", length(x))
     println("Box sides = ", box.unit_cell.matrix[1,1])
