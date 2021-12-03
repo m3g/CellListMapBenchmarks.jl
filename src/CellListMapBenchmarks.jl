@@ -85,7 +85,7 @@ function namdlarge()
     log = open(dir*"/$hostname-$(np)-threads.dat","w")
     println(log,"Number of threads: $np")
     println(log,"CellListMap: $t_cl")
-    println(log,"Namd 2.14:   $t_namd")
+    #println(log,"Namd 2.14:   $t_namd")
     close(log)
 end
 
