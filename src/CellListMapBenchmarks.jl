@@ -74,13 +74,13 @@ function namd100k()
 end
 
 # Run namd 1_250_000 benchmark
-function namdlarge()
+function namdlarge(n=4)
     hostname=gethostname()
-    name="namdlarge"
+    name="namdlarge_$n"
     version = get_version()
     dir = create_dir(version,name)
     np = Threads.nthreads()
-    t_cl = @elapsed Simulation.simulate_large(4)
+    t_cl = @elapsed Simulation.simulate_large(n)
     #t_namd = @elapsed run(`$namd_dir/namd2 +p$np $working_dir/ne100k.namd`)
     log = open(dir*"/$hostname-$(np)-threads.dat","w")
     println(log,"Number of threads: $np")
