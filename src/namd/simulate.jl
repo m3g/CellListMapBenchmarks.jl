@@ -111,7 +111,7 @@ function simulate_large(n;nsteps=1,nbatches=(0,0))
         nsteps=nsteps,
         trajfile = "$working_dir/$filename.xyz"
     )
-    simulate(params)
+    simulate(params,nbatches=nbatches)
 end
 
 #
