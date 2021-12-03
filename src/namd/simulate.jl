@@ -16,14 +16,14 @@ working_dir=@__DIR__
 # Simulation setup
 #
 @with_kw struct Params{V,N,T,M,UnitCellType}
-    x0::V = getcoor("./ne10k_initial.pdb")  
+    x0::V = getcoor("$working_dir/ne10k_initial.pdb")  
     temperature::T = 300.
     nsteps::Int = 5_000
     dt::T = 1.0 # fs
     ibath::Int = 10
     print_energy::Int = 50 
     print_traj::Int = 10000
-    trajfile::String = "./ne10k_traj.xyz"
+    trajfile::String = "$working_dir/ne10k_traj.xyz"
     cutoff::T = 12.
     box::Box{UnitCellType,N,T,M} = Box([ 46.37, 46.37, 46.37 ], cutoff, lcell=2)
     # Parameters for Neon
@@ -89,10 +89,38 @@ function getcoor(file)
     return copy(reinterpret(reshape,SVector{3,Float64},Chemfiles.positions(frame)))
 end
 
+# Create arbitrarily larger box
+function createbox(n=0,cutoff=12.)
+    sides_base = [ 46.37, 46.37, 46.37 ]
+    x = getcoor("$working_dir/ne10k_initial.pdb")
+    box = Box(sides_base,cutoff)
+    CellListMap.replicate_system!(x,box,(0:n,0:n,0:n))
+    sides = (n+1)*sides_base
+    box = Box(sides,cutoff,lcell=2)
+    return x, box
+end
+
+function simulate_large(n;nsteps=1,nbatches=(0,0))
+    x, box = createbox(n)
+    println("Number of particles = ", length(x))
+    println("Box sides = ", box.unit_cell.matrix[1,1])
+    filename = "box_replicate_$n"
+    params = Params(
+        x0 = x,
+        box = box,
+        nsteps=nsteps,
+        trajfile = "$working_dir/$filename.xyz"
+    )
+    simulate(params)
+end
+
 #
 # Simulation
 #
-function simulate(params::Params{V,N,T,UnitCellType}; parallel=true) where {V,N,T,UnitCellType}
+function simulate(params::Params{V,N,T,UnitCellType}; 
+    nbatches=(0,0),
+    parallel=true
+) where {V,N,T,UnitCellType}
     @unpack x0, temperature, nsteps, box, dt, ε, σ, mass, kB = params
     trajfile = open(params.trajfile,"w")
 
@@ -114,11 +142,11 @@ function simulate(params::Params{V,N,T,UnitCellType}; parallel=true) where {V,N,
     @. v = v * sqrt(temperature/t0)
 
     # Build cell lists for the first time
-    cl = CellList(x,box,parallel=parallel)
+    cl = CellList(x,box,parallel=parallel,nbatches=nbatches)
 
     # preallocate threaded output, since it contains the forces vector
     f .= Ref(zeros(eltype(f)))
-    f_threaded = [ deepcopy(f) for _ in 1:cl.nbatches.map_computation ]
+    f_threaded = [ deepcopy(f) for _ in 1:CellListMap.nbatches(cl) ]
     aux = CellListMap.AuxThreaded(cl)
 
     # Print data at initial point
