@@ -8,7 +8,7 @@ include("./namd/simulate.jl")
 using .Simulation
 
 export version
-export namd10k, namd100k
+export namd10k, namd100k, namdlarge
 export neighbourlists
 
 # function to get the CellListMap version used
