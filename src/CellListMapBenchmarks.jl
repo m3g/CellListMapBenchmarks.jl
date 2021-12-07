@@ -29,7 +29,7 @@ function create_dir(version,name)
 end
 
 # Run namd 10k benchmark
-function namd10k()
+function namd10k(;exclusive=false)
     hostname=gethostname()
     name="namd10k"
     version = get_version()
@@ -43,15 +43,22 @@ function namd10k()
     np = Threads.nthreads()
     t_cl = @elapsed Simulation.simulate(params)
     t_namd = @elapsed run(`$namd_dir/namd2 +p$np $working_dir/ne10k.namd`)
-    log = open(dir*"/$hostname-$(np)-threads.dat","w")
-    println(log,"Number of threads: $np")
-    println(log,"CellListMap: $t_cl")
-    println(log,"Namd 2.14:   $t_namd")
-    close(log)
+    if !exclusive
+        log = open(dir*"/$hostname-$(np)-threads.dat","w")
+        println(log,"Number of threads: $np")
+        println(log,"CellListMap: $t_cl")
+        println(log,"Namd 2.14:   $t_namd")
+        close(log)
+    else
+        log = open(dir*"/$hostname-$(np)-threads_exclusive.dat","w")
+        println(log,"Number of threads: $np")
+        println(log,"CellListMap: $t_cl")
+        close(log)
+    end
 end
 
 # Run namd 100k benchmark
-function namd100k()
+function namd100k(;exclusive=false)
     hostname=gethostname()
     name="namd100k"
     version = get_version()
@@ -66,11 +73,18 @@ function namd100k()
     np = Threads.nthreads()
     t_cl = @elapsed Simulation.simulate(params)
     t_namd = @elapsed run(`$namd_dir/namd2 +p$np $working_dir/ne100k.namd`)
-    log = open(dir*"/$hostname-$(np)-threads.dat","w")
-    println(log,"Number of threads: $np")
-    println(log,"CellListMap: $t_cl")
-    println(log,"Namd 2.14:   $t_namd")
-    close(log)
+    if !exclusive
+        log = open(dir*"/$hostname-$(np)-threads.dat","w")
+        println(log,"Number of threads: $np")
+        println(log,"CellListMap: $t_cl")
+        println(log,"Namd 2.14:   $t_namd")
+        close(log)
+    else
+        log = open(dir*"/$hostname-$(np)-threads_exclusive.dat","w")
+        println(log,"Number of threads: $np")
+        println(log,"CellListMap: $t_cl")
+        close(log)
+    end
 end
 
 # Run namd 1_250_000 benchmark
