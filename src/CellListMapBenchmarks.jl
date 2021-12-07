@@ -7,6 +7,8 @@ using CellListMap
 include("./namd/simulate.jl")
 using .Simulation
 
+include("./neighbourlists/neighbourlists.jl")
+
 export version
 export namd10k, namd100k, namdlarge
 export neighbourlists
@@ -104,22 +106,22 @@ function namdlarge(;n=4)
 end
 
 # neighbourlist benchmarks
-function neighbourlists()
-    hostname=gethostname()
-    name="neighbourlists"
-    version = get_version()
-    dir = create_dir(version,name)
-    working_dir = Simulation.working_dir
-    
-
-
-
-    log = open(dir*"/$hostname-$(np)-threads.dat","w")
-    println(log,"Number of threads: $np")
-    println(log,"CellListMap: $t_cl")
-    println(log,"Namd 2.14:   $t_namd")
-    close(log)
-end
+#function neighbourlists()
+#    hostname=gethostname()
+#    name="neighbourlists"
+#    version = get_version()
+#    dir = create_dir(version,name)
+#    working_dir = Simulation.working_dir
+#    
+#
+#
+#
+#    log = open(dir*"/$hostname-$(np)-threads.dat","w")
+#    println(log,"Number of threads: $np")
+#    println(log,"CellListMap: $t_cl")
+#    println(log,"Namd 2.14:   $t_namd")
+#    close(log)
+#end
 
 
 end
