@@ -1,8 +1,12 @@
+module NeighborLists
+
 using BenchmarkTools, Test
 using NearestNeighbors
 using CellListMap
 using StaticArrays
 using LinearAlgebra
+
+working_dir=@__DIR__
 
 # 
 # inrage using BallTree
@@ -13,13 +17,13 @@ function nl_NN(x,y,r)
 end
 
 #
-# a simple wrapper around the neighbourlist function, to simplify the swapping
+# a simple wrapper around the neighborlist function, to simplify the swapping
 # for this test
 #
 function nl_CL(x,y,r;parallel=true,autoswap=false)
     box = Box(limits(x,y),r)
     cl = CellList(x,y,box,parallel=parallel,autoswap=autoswap)
-    return CellListMap.neighbourlist(box,cl,parallel=parallel)
+    return CellListMap.neighborlist(box,cl,parallel=parallel)
 end
 
 #
@@ -59,11 +63,14 @@ function naive(x,y,cutoff)
   pair_list
 end
 
-function neighbourlists()
+function neighborlists(filename)
 
   ρ = 0.1 # density of atoms in water atoms/Å^3
   r = 12. # typical MD cutoff
 
+  file = open(filename,"w")
+  println("N1,N2,NNxy, NNyx, cls_xy, clp_xy, cls_yx, clp_xy")
+  println(file,"N1,N2,NNxy, NNyx, cls_xy, clp_xy, cls_yx, clp_xy")
   for N1 in [1, 10, 100, 1_000, 10_000, 100_000]
     for N2 in [10^6]
 
@@ -76,27 +83,29 @@ function neighbourlists()
        GC.gc()
        list_NN = nl_NN(x,y,r)
        GC.gc()
-       
-       println("----------------------------------")
-       print("N1 = $N1 ; N2 = $N2 ; PASS TEST = ")
-       println(compare_result(list_CL,list_NN))
-       print("nl (x,y): "); @btime nl_NN($x,$y,$r) samples=1 
+
+       nn_xy = @belapsed nl_NN($x,$y,$r) samples=1
        GC.gc()
-       print("nl (y,x): "); @btime nl_NN($y,$x,$r) samples=1 
+       nn_yx = @belapsed nl_NN($y,$x,$r) samples=1 
        GC.gc()
-       print("cl serial (x,y): "); @btime nl_CL($x,$y,$r,parallel=false, autoswap=false) samples=1
+       cls_xy = @belapsed nl_CL($x,$y,$r,parallel=false, autoswap=false) samples=1
        GC.gc()
-       print("cl parallel (x,y): "); @btime nl_CL($x,$y,$r,parallel=true, autoswap=false) samples=1
+       clp_xy = @belapsed nl_CL($x,$y,$r,parallel=true, autoswap=false) samples=1
        GC.gc()
-       print("cl serial (y,x): "); @btime nl_CL($y,$x,$r,parallel=false, autoswap=false) samples=1
+       cls_yx = @belapsed nl_CL($y,$x,$r,parallel=false, autoswap=false) samples=1
        GC.gc()
-       print("cl parallel (y,x): "); @btime nl_CL($y,$x,$r,parallel=true, autoswap=false) samples=1
+       clp_yx = @belapsed nl_CL($y,$x,$r,parallel=true, autoswap=false) samples=1
        GC.gc()
+       println("$N1, $N2, $nn_xy, $nn_yx, $cls_xy, $clp_xy, $cls_yx, $clp_yx") 
+       println(file, "$N1, $N2, $nn_xy, $nn_yx, $cls_xy, $clp_xy, $cls_yx, $clp_yx") 
 
     end
   end
+  close(file)
 
   return 
+end
+
 end
 
 

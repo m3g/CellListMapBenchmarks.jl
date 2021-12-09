@@ -6,12 +6,13 @@ using CellListMap
 
 include("./namd/simulate.jl")
 using .Simulation
+export namd10k, namd100k, namdlarge
 
-include("./neighbourlists/neighbourlists.jl")
+include("./neighborlists/neighborlists.jl")
+using .NeighborLists
+export neighborlists
 
 export version
-export namd10k, namd100k, namdlarge
-export neighbourlists
 
 # function to get the CellListMap version used
 get_version()=filter(x-> x.second.name == "CellListMap", Pkg.dependencies()) |> x -> first(x)[2].version
@@ -105,23 +106,17 @@ function namdlarge(;n=4)
     close(log)
 end
 
-# neighbourlist benchmarks
-#function neighbourlists()
-#    hostname=gethostname()
-#    name="neighbourlists"
-#    version = get_version()
-#    dir = create_dir(version,name)
-#    working_dir = Simulation.working_dir
-#    
-#
-#
-#
-#    log = open(dir*"/$hostname-$(np)-threads.dat","w")
-#    println(log,"Number of threads: $np")
-#    println(log,"CellListMap: $t_cl")
-#    println(log,"Namd 2.14:   $t_namd")
-#    close(log)
-#end
+# neighborlist benchmarks
+function neighborlists()
+    np = Threads.nthreads()
+    hostname=gethostname()
+    name="neighborlists"
+    version = get_version()
+    dir = create_dir(version,name)
+    working_dir = NeighborLists.working_dir
+    logname = dir*"/$hostname-$(np)-threads.dat"
+    NeighborLists.neighborlists(logname)
+end
 
 
 end
