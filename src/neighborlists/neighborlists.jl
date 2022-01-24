@@ -71,7 +71,7 @@ function neighborlists(filename)
   file = open(filename,"w")
   println("N1,N2,NNxy, NNyx, cls_xy, clp_xy, cls_yx, clp_xy")
   println(file,"N1,N2,NNxy, NNyx, cls_xy, clp_xy, cls_yx, clp_xy")
-  for N1 in [1, 10, 100, 1_000, 10_000, 100_000]
+  for N1 in [10^6] #[1, 10, 100, 1_000, 10_000, 100_000]
     for N2 in [10^6]
 
        side = ((N1+N2)/ρ)^(1/3)
@@ -107,10 +107,6 @@ function neighborlists(filename)
 end
 
 end
-
-
-
-
 
 
 
