@@ -1,0 +1,37 @@
+/home/lovelace/proj/proj864/lmartine/CellListMapBenchmarks.jl/src/namd
+Number of threads: 32
+WallClock: 10.244846  CPUTime: 9.576878  Memory: 2171.824219 MB
+ 12.867888 seconds (614.42 k allocations: 236.952 MiB, 0.47% gc time)
+Number of threads: 28
+WallClock: 15.547023  CPUTime: 7.995699  Memory: 1907.703125 MB
+ 13.360092 seconds (605.63 k allocations: 226.734 MiB, 1.04% gc time)
+Number of threads: 24
+WallClock: 14.768951  CPUTime: 9.257458  Memory: 1644.125000 MB
+ 13.644387 seconds (596.24 k allocations: 216.449 MiB, 0.23% gc time)
+Number of threads: 20
+WallClock: 39.275970  CPUTime: 11.743134  Memory: 1381.558594 MB
+ 15.234296 seconds (587.29 k allocations: 206.235 MiB, 0.20% gc time)
+Number of threads: 16
+WallClock: 55.113579  CPUTime: 13.323579  Memory: 1119.011719 MB
+ 17.880844 seconds (577.65 k allocations: 195.966 MiB, 0.16% gc time)
+Number of threads: 14
+WallClock: 42.422211  CPUTime: 15.182687  Memory: 988.429688 MB
+ 17.752708 seconds (535.32 k allocations: 179.614 MiB, 0.28% gc time)
+Number of threads: 12
+WallClock: 18.552280  CPUTime: 17.437120  Memory: 858.460938 MB
+ 19.237935 seconds (460.12 k allocations: 158.637 MiB, 0.50% gc time)
+Number of threads: 10
+WallClock: 22.677927  CPUTime: 21.029850  Memory: 730.261719 MB
+ 21.327241 seconds (417.25 k allocations: 142.890 MiB, 0.15% gc time)
+Number of threads: 8
+WallClock: 26.999903  CPUTime: 26.046776  Memory: 601.968750 MB
+ 26.426437 seconds (359.96 k allocations: 121.369 MiB, 0.17% gc time)
+Number of threads: 4
+WallClock: 55.848080  CPUTime: 50.385822  Memory: 358.886719 MB
+ 45.330240 seconds (228.12 k allocations: 79.160 MiB, 0.02% gc time)
+Number of threads: 2
+WallClock: 110.587379  CPUTime: 99.416649  Memory: 332.367188 MB
+ 85.395491 seconds (162.09 k allocations: 57.182 MiB, 0.02% gc time)
+Number of threads: 1
+WallClock: 203.039169  CPUTime: 196.800812  Memory: 273.183594 MB
+162.192115 seconds (22.25 k allocations: 31.207 MiB, 0.01% gc time)

@@ -1,5 +1,3 @@
-module Simulation
-
 import Chemfiles
 using CellListMap
 using FastPow
@@ -10,20 +8,18 @@ using Parameters
 using Statistics: mean
 using LinearAlgebra: norm_sqr
 
-working_dir=@__DIR__
-
 #
 # Simulation setup
 #
 @with_kw struct Params{V,N,T,M,UnitCellType}
     x0::V = getcoor("./ne10k_initial.pdb")  
     temperature::T = 300.
-    nsteps::Int = 5_000
+    nsteps::Int = 2000
     dt::T = 1.0 # fs
     ibath::Int = 10
     print_energy::Int = 50 
-    print_traj::Int = 10000
-    trajfile::String = "./ne10k_traj.xyz"
+    print_traj::Int = 10^6
+    trajfile::String = "ne10k_traj.xyz"
     cutoff::T = 12.
     box::Box{UnitCellType,N,T,M} = Box([ 46.37, 46.37, 46.37 ], cutoff, lcell=2)
     # Parameters for Neon
@@ -167,13 +163,10 @@ function simulate(params::Params{V,N,T,UnitCellType}; parallel=true) where {V,N,
 
 end
 
-end # module
-
-#Executing
-#using .Simulation
-#params = Simulation.Params()
-#@time Simulation.simulate(params)
-
+#params = Params(nsteps=50)
+#@time simulate(params)
+#params = Params()
+#@time simulate(params)
 
 
 
