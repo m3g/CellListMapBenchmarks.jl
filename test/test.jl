@@ -22,7 +22,7 @@ function sumd_threads(x,y,nbatches,aux)
             aux[ibatch] = acc
         end
     end
-    return sum(v[1] for v in aux)
+    return sum(aux)
 end
 
 function sumd_spawn(x,y,nbatches,aux)
@@ -42,7 +42,7 @@ function sumd_spawn(x,y,nbatches,aux)
             aux[ibatch] = acc
         end
     end
-    return sum(v[1] for v in aux)
+    return sum(aux)
 end
 
 function sumd_floop(x,y,nbatches)
